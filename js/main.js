@@ -12,15 +12,35 @@ const block = 'block';
 const active = 'players active';
 const notActive = 'players';
 const startMenuButton = document.querySelectorAll('.button')[0];
-const boxes = document.querySelectorAll('.boxes')[0];
-const mouseOut = function(){
-  if (!event.target.classList.contains('box-filled')){
-    event.target.style.backgroundImage = 'none';
+const boxes = document.querySelectorAll('.box');
+
+//Returns X or O .svg based on active player
+function playerSymbol() {
+  if (player1.classList == "players active"){
+    return "url('img/o.svg')";
+  } else if (player2.classList == "players active"){
+    return "url('img/x.svg')";
   }
 }
 
+//Returns blue or orange color based on active player
+function playerChecked(){
+  if (player1.classList == "players active"){
+    return 'box box-filled-1';
+  } else if (player2.classList == "players active"){
+    return 'box box-filled-2';
+  }
+}
 
+//Helper function for mouseout event listener
+function mouseOut(event) {
+  event.target.style.backgroundImage = none;
+}
 
+//Helper function for mouseover event listener
+function mouseOver(event){
+  event.target.style.backgroundImage = playerSymbol();
+}
 
 //Appends start and win clusters to DOM, displays only start menu on load
 window.onload = function () {
@@ -47,16 +67,25 @@ startMenuButton.addEventListener('click', (e) =>{
 });
 
 //Displays background image upon mouseover depending on turn
-boxes.addEventListener('mouseover', (event) => {
-  event.target.style.backgroundImage = "url('img/o.svg')";
-});
-
+boxes.forEach(box => box.addEventListener('mouseover', mouseOver));
 
 //Displays background image upon mouseout depending on turn
-boxes.addEventListener('mouseout', mouseOut);
+boxes.forEach(box => box.addEventListener('mouseout', mouseOut));
 
 //Displays background image upon mouseout depending on turn
-boxes.addEventListener('click', (event) => {
-  event.target.setAttribute('class', 'box box-filled-1')
-  event.target.style.backgroundImage = "url('img/o.svg')";
-});
+//Switches players turn
+boxes.forEach(box => box.addEventListener('click', handler));
+
+//Helper function for click event listner
+function handler(event) {
+  event.target.removeEventListener(event.type, arguments.callee);
+  event.target.removeEventListener('mouseout', mouseOut);
+  event.target.removeEventListener('mouseover', mouseOver);
+  event.target.setAttribute('class', playerChecked());
+  event.target.style.backgroundImage = playerSymbol();
+  if (player1.classList == "players active"){
+    activePlayer(notActive, active);
+  } else if (player2.classList == "players active"){
+    activePlayer(active, notActive);
+  }
+}
