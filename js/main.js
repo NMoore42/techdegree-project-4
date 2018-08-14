@@ -12,7 +12,13 @@ const block = 'block';
 const active = 'players active';
 const notActive = 'players';
 const startMenuButton = document.querySelectorAll('.button')[0];
-const boxes = document.querySelectorAll('.box');
+const boxes = document.querySelectorAll('.boxes')[0];
+const mouseOut = function(){
+  if (!event.target.classList.contains('box-filled')){
+    event.target.style.backgroundImage = 'none';
+  }
+}
+
 
 
 
@@ -41,39 +47,16 @@ startMenuButton.addEventListener('click', (e) =>{
 });
 
 //Displays background image upon mouseover depending on turn
-boxes.forEach(box => {
-  if (box.classList.value !== 'box box-filled-1'){
-    box.addEventListener('mouseover', (e) => {
-      box.style.backgroundImage = "url('img/o.svg')";
-      });
-    }
+boxes.addEventListener('mouseover', (event) => {
+  event.target.style.backgroundImage = "url('img/o.svg')";
 });
 
 
 //Displays background image upon mouseout depending on turn
-boxes.forEach(box => {
-  if (box.classList.value !== 'box box-filled-1'){
-    box.addEventListener('mouseout', (e) => {
-      box.style.backgroundImage = "none";
-      });
-    }
-});
+boxes.addEventListener('mouseout', mouseOut);
 
 //Displays background image upon mouseout depending on turn
-boxes.forEach(box => {
-  if (box.classList.value !== 'box box-filled-1'){
-    box.addEventListener('click', (e) => {
-      box.setAttribute('class', 'box box-filled-1');
-      box.style.backgroundImage = "url('img/o.svg')";
-      });
-    }
-  //squareFill(box);
+boxes.addEventListener('click', (event) => {
+  event.target.setAttribute('class', 'box box-filled-1')
+  event.target.style.backgroundImage = "url('img/o.svg')";
 });
-
-//When square is clicked, box-filled-1 or box--filled-2 is class is attached.
-// function squareFill(box){
-//   if (box.classList.contains('box-filled') !== true){
-//     box.setAttribute('class', 'box box-filled-1');
-//     box.style.backgroundImage = "url('img/o.svg')";
-//   }
-// }
