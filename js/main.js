@@ -15,6 +15,7 @@ const startMenuButton = document.querySelectorAll('.button')[0];
 const boxes = document.querySelectorAll('.box');
 const endScreenMessage = document.querySelectorAll('#finish p')[0];
 const endMenuButton = document.querySelectorAll('.button')[1];
+const header = document.querySelectorAll('header')[0];
 
 
 
@@ -65,6 +66,10 @@ function mouseOver(event){
 //Appends start and win clusters to DOM, displays only start menu on load
 window.onload = function () {
   screenDisplay(block, none, none);
+  let nameInput = document.createElement('input');
+  nameInput.className = 'button-input';
+  nameInput.setAttribute('placeholder', 'Enter name...');
+  header.appendChild(nameInput);
 }
 
 //Callback function for screen display Controls
@@ -82,13 +87,25 @@ function activePlayer(p1Status, p2Status) {
 
 //When Start game button is pressed, gameMenu screen appears
 startMenuButton.addEventListener('click', (e) =>{
-  screenDisplay(none, block, none);
-  activePlayer(active, notActive);
+  let nameInput = document.querySelectorAll('.button-input')[0];
+  if (nameInput.value == ''){
+    nameInput.style.borderColor = 'red';
+  } else {
+    player1.value = nameInput.value;
+    activePlayer(active, notActive);
+    screenDisplay(none, block, none);
+  }
 });
 
-//When New game button is pressed, gameMenu screen appears
+//When New game button is pressed, gameMenu screen appears and gameplay
 endMenuButton.addEventListener('click', (e) =>{
-  document.location.reload();
+  boxes.forEach(box => box.setAttribute('class', 'box'));
+  boxes.forEach(box => box.style.backgroundImage = none);
+  boxes.forEach(box => box.addEventListener('mouseover', mouseOver));
+  boxes.forEach(box => box.addEventListener('mouseout', mouseOut));
+  boxes.forEach(box => box.addEventListener('click', handler));
+  activePlayer(active, notActive);
+  screenDisplay(none, block, none);
 });
 
 //Displays background image upon mouseover depending on turn
@@ -102,9 +119,6 @@ boxes.forEach(box => box.addEventListener('mouseout', mouseOut));
 //Switches players turn, makes box inactive
 boxes.forEach(box => box.addEventListener('click', handler));
 
-//Checks for win after each click
-//boxes.forEach(box => box.addEventListener('click', checkWinAll));
-
 //Helper function for click event listner
 function handler(event) {
   event.target.removeEventListener(event.type, arguments.callee);
@@ -116,6 +130,7 @@ function handler(event) {
   checkTie();
 }
 
+//Helper function for checkWinAll
 function checkWin(box1, box2, box3) {
   if (boxes[box1].classList == playerChecked() &&
   boxes[box2].classList == playerChecked() &&
@@ -135,7 +150,10 @@ function checkWinAll(){
       checkWin(0, 4, 8) == true ||
       checkWin(6, 4, 2) == true
     ){
-    setTimeout(endGameWin, 500);
+    boxes.forEach(box => box.removeEventListener('click', handler));
+    boxes.forEach(box => box.removeEventListener('mouseover', mouseOver));
+    boxes.forEach(box => box.removeEventListener('mouseout', mouseOut));
+    setTimeout(endGameWin, 1000);
   } else {
     if (player1.classList == "players active"){
       activePlayer(notActive, active);
@@ -149,7 +167,7 @@ function checkWinAll(){
 function checkTie (){
   let crossSquares = document.querySelectorAll('.box-filled-1');
   if (crossSquares.length == 5 && winMenu.style.display !== 'block'){
-    setTimeout(endGameTie, 500);
+    setTimeout(endGameTie, 1000);
   }
 }
 
