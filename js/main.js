@@ -13,6 +13,10 @@ const active = 'players active';
 const notActive = 'players';
 const startMenuButton = document.querySelectorAll('.button')[0];
 const boxes = document.querySelectorAll('.box');
+const endScreenMessage = document.querySelectorAll('#finish p')[0];
+const endMenuButton = document.querySelectorAll('.button')[1];
+
+
 
 //Returns X or O .svg based on active player
 function playerSymbol() {
@@ -21,6 +25,22 @@ function playerSymbol() {
   } else if (player2.classList == "players active"){
     return "url('img/x.svg')";
   }
+}
+
+//Displays winning screen based on active player at win
+function winningScreen(){
+  endScreenMessage.innerHTML = 'Winner';
+  if (player1.classList == "players active"){
+    winMenu.setAttribute('class', 'screen screen-win screen-win-one' );
+  } else if (player2.classList == "players active"){
+    winMenu.setAttribute('class', 'screen screen-win screen-win-two' );
+  }
+}
+
+//Displays tie screen based on active player at win
+function tieScreen(){
+  endScreenMessage.innerHTML = "It's a Tie!";
+  winMenu.setAttribute('class', 'screen screen-win screen-win-tie' );
 }
 
 //Returns blue or orange color based on active player
@@ -66,15 +86,24 @@ startMenuButton.addEventListener('click', (e) =>{
   activePlayer(active, notActive);
 });
 
+//When New game button is pressed, gameMenu screen appears
+endMenuButton.addEventListener('click', (e) =>{
+  document.location.reload();
+});
+
 //Displays background image upon mouseover depending on turn
 boxes.forEach(box => box.addEventListener('mouseover', mouseOver));
 
 //Displays background image upon mouseout depending on turn
 boxes.forEach(box => box.addEventListener('mouseout', mouseOut));
 
-//Displays background image upon mouseout depending on turn
-//Switches players turn
+//Displays background color upon click depending on turn
+//Displays symbol image upon click depending on turn
+//Switches players turn, makes box inactive
 boxes.forEach(box => box.addEventListener('click', handler));
+
+//Checks for win after each click
+//boxes.forEach(box => box.addEventListener('click', checkWinAll));
 
 //Helper function for click event listner
 function handler(event) {
@@ -83,9 +112,55 @@ function handler(event) {
   event.target.removeEventListener('mouseover', mouseOver);
   event.target.setAttribute('class', playerChecked());
   event.target.style.backgroundImage = playerSymbol();
-  if (player1.classList == "players active"){
-    activePlayer(notActive, active);
-  } else if (player2.classList == "players active"){
-    activePlayer(active, notActive);
+  checkWinAll();
+  checkTie();
+}
+
+function checkWin(box1, box2, box3) {
+  if (boxes[box1].classList == playerChecked() &&
+  boxes[box2].classList == playerChecked() &&
+  boxes[box3].classList == playerChecked()){
+    return true;
   }
+}
+
+//Checks for win.  If true, delays 5 seconds and calls endGameWin function
+function checkWinAll(){
+  if (checkWin(0, 1, 2) == true ||
+      checkWin(3, 4, 5) == true ||
+      checkWin(6, 7, 8) == true ||
+      checkWin(0, 3, 6) == true ||
+      checkWin(1, 4, 7) == true ||
+      checkWin(2, 5, 8) == true ||
+      checkWin(0, 4, 8) == true ||
+      checkWin(6, 4, 2) == true
+    ){
+    setTimeout(endGameWin, 500);
+  } else {
+    if (player1.classList == "players active"){
+      activePlayer(notActive, active);
+    } else if (player2.classList == "players active"){
+      activePlayer(active, notActive);
+    }
+  }
+}
+
+////Checks for win.  If true, delays 5 seconds and calls endGameTie function
+function checkTie (){
+  let crossSquares = document.querySelectorAll('.box-filled-1');
+  if (crossSquares.length == 5 && winMenu.style.display !== 'block'){
+    setTimeout(endGameTie, 500);
+  }
+}
+
+//Displays end screen with winner based on activePlayer
+function endGameWin(){
+  screenDisplay(none, none, block);
+  winningScreen();
+}
+
+//Displays end screen with tie
+function endGameTie(){
+  screenDisplay(none, none, block);
+  tieScreen();
 }
