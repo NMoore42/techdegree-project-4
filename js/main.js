@@ -19,6 +19,7 @@ const header = document.querySelectorAll('header')[0];
 
 
 
+
 //Returns X or O .svg based on active player
 function playerSymbol() {
   if (player1.classList == "players active"){
@@ -68,7 +69,8 @@ window.onload = function () {
   screenDisplay(block, none, none);
   let nameInput = document.createElement('input');
   nameInput.className = 'button-input';
-  nameInput.setAttribute('placeholder', 'Enter name...');
+  nameInput.setAttribute('placeholder', 'Enter initials...');
+  nameInput.setAttribute('maxlength', '3');
   header.appendChild(nameInput);
 }
 
@@ -128,8 +130,13 @@ function handler(event) {
   event.target.removeEventListener('mouseover', mouseOver);
   event.target.setAttribute('class', playerChecked());
   event.target.style.backgroundImage = playerSymbol();
-  checkWinAll();
+  if(checkWinAll()){
+    checkWinAll();
+  } else if (checkTie()){
   checkTie();
+} else {
+  computerPlay1();
+  }
 }
 
 //Helper function for checkWinAll
@@ -143,6 +150,7 @@ function checkWin(box1, box2, box3) {
 
 //Checks for win.  If true, delays 5 seconds and calls endGameWin function
 function checkWinAll(){
+  let nameInput = document.querySelectorAll('.button-input')[0].value;
   if (checkWin(0, 1, 2) == true ||
       checkWin(3, 4, 5) == true ||
       checkWin(6, 7, 8) == true ||
@@ -156,9 +164,13 @@ function checkWinAll(){
     boxes.forEach(box => box.removeEventListener('mouseover', mouseOver));
     boxes.forEach(box => box.removeEventListener('mouseout', mouseOut));
     if (player1.classList == "players active"){
+      endScreenMessage.setAttribute('data-text', nameInput);
+      endScreenMessage.style.fontFamily = "Montserrat";
       player1.style.backgroundColor = '#54D17A';
     } else if (player2.classList == "players active"){
+      endScreenMessage.setAttribute('data-text', 'X')
       player2.style.backgroundColor = '#54D17A';
+      endScreenMessage.style.fontFamily = "Montserrat";
     }
     setTimeout(endGameWin, 1000);
     return true;
@@ -176,6 +188,7 @@ function checkTie (){
   let crossSquares = document.querySelectorAll('.box-filled-1');
   if (crossSquares.length == 5 && checkWinAll() !== true){
     setTimeout(endGameTie, 1000);
+    return true;
   }
 }
 
@@ -189,4 +202,30 @@ function endGameWin(){
 function endGameTie(){
   screenDisplay(none, none, block);
   tieScreen();
+}
+
+function computerPlay1(){
+  let i = Math.floor(Math.random() * 9)
+  if (boxes[i].classList.value !== 'box box-filled-1' && boxes[i].classList.value !== 'box box-filled-2'){
+    boxes[i].removeEventListener('click', handler);
+    boxes[i].removeEventListener('mouseout', mouseOut);
+    boxes[i].removeEventListener('mouseover', mouseOver);
+    boxes[i].setAttribute('class', playerChecked());
+    boxes[i].style.backgroundImage = playerSymbol();
+    checkWinAll();
+    checkTie();
+  } else {computerPlay2()}
+}
+
+function computerPlay2(){
+  let i = Math.floor(Math.random() * 9)
+  if (boxes[i].classList.value !== 'box box-filled-1' && boxes[i].classList.value !== 'box box-filled-2'){
+    boxes[i].removeEventListener('click', handler);
+    boxes[i].removeEventListener('mouseout', mouseOut);
+    boxes[i].removeEventListener('mouseover', mouseOver);
+    boxes[i].setAttribute('class', playerChecked());
+    boxes[i].style.backgroundImage = playerSymbol();
+    checkWinAll();
+    checkTie();
+  } else {computerPlay1()}
 }

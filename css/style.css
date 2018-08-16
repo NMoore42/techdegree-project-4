@@ -60,7 +60,7 @@ h1 {
       left: 0;
       right: 0;
       color: #000;
-      font-size: 4em;
+      font-size: 3em;
       font-weight: 400;
       line-height: 0;
       z-index: -1; }
@@ -71,18 +71,21 @@ h1 {
     .screen-win-one .button {
       color: #3688C3; }
     .screen-win-one p:before {
-      content: "o";
-      top: 1.75rem; }
+      content: attr(data-text);
+      top: 3.75rem; }
   .screen-win-two {
     background: #3688C3; }
     .screen-win-two .button {
       color: #FFA000; }
     .screen-win-two p:before {
-      content: "×";
-      top: 4.5rem; }
+      content: attr(data-text);
+      top: 3.75rem; }
+
 
 .board {
   padding-top: 1em; }
+  .board h1 {
+    margin-top: 0.3em; }
   .board h1 {
     margin-top: 0.3em; }
 
