@@ -38,7 +38,7 @@ function winningScreen(){
   }
 }
 
-//Displays tie screen based on active player at win
+//Displays tie screen
 function tieScreen(){
   endScreenMessage.innerHTML = "It's a Tie!";
   winMenu.setAttribute('class', 'screen screen-win screen-win-tie' );
@@ -99,6 +99,8 @@ startMenuButton.addEventListener('click', (e) =>{
 
 //When New game button is pressed, gameMenu screen appears and gameplay
 endMenuButton.addEventListener('click', (e) =>{
+  player1.style.backgroundColor = '';
+  player2.style.backgroundColor = '';
   boxes.forEach(box => box.setAttribute('class', 'box'));
   boxes.forEach(box => box.style.backgroundImage = none);
   boxes.forEach(box => box.addEventListener('mouseover', mouseOver));
@@ -153,7 +155,13 @@ function checkWinAll(){
     boxes.forEach(box => box.removeEventListener('click', handler));
     boxes.forEach(box => box.removeEventListener('mouseover', mouseOver));
     boxes.forEach(box => box.removeEventListener('mouseout', mouseOut));
+    if (player1.classList == "players active"){
+      player1.style.backgroundColor = '#54D17A';
+    } else if (player2.classList == "players active"){
+      player2.style.backgroundColor = '#54D17A';
+    }
     setTimeout(endGameWin, 1000);
+    return true;
   } else {
     if (player1.classList == "players active"){
       activePlayer(notActive, active);
@@ -166,7 +174,7 @@ function checkWinAll(){
 ////Checks for win.  If true, delays 5 seconds and calls endGameTie function
 function checkTie (){
   let crossSquares = document.querySelectorAll('.box-filled-1');
-  if (crossSquares.length == 5 && winMenu.style.display !== 'block'){
+  if (crossSquares.length == 5 && checkWinAll() !== true){
     setTimeout(endGameTie, 1000);
   }
 }
