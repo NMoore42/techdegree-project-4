@@ -16,6 +16,8 @@ const boxes = document.querySelectorAll('.box');
 const endScreenMessage = document.querySelectorAll('#finish p')[0];
 const endMenuButton = document.querySelectorAll('.button')[1];
 const header = document.querySelectorAll('header')[0];
+const screenVs = document.querySelectorAll('.board2')[0];
+
 
 
 
@@ -72,6 +74,8 @@ window.onload = function () {
   nameInput.setAttribute('placeholder', 'Enter initials...');
   nameInput.setAttribute('maxlength', '3');
   header.appendChild(nameInput);
+  nameInput.focus();
+
 }
 
 //Callback function for screen display Controls
@@ -94,6 +98,7 @@ startMenuButton.addEventListener('click', (e) =>{
     nameInput.style.borderColor = 'red';
   } else {
     player1.value = nameInput.value;
+    screenVs.innerHTML = nameInput.value + ' vs HAL';
     activePlayer(active, notActive);
     screenDisplay(none, block, none);
   }
@@ -168,7 +173,7 @@ function checkWinAll(){
       endScreenMessage.style.fontFamily = "Montserrat";
       player1.style.backgroundColor = '#54D17A';
     } else if (player2.classList == "players active"){
-      endScreenMessage.setAttribute('data-text', 'X')
+      endScreenMessage.setAttribute('data-text', 'HAL')
       player2.style.backgroundColor = '#54D17A';
       endScreenMessage.style.fontFamily = "Montserrat";
     }
