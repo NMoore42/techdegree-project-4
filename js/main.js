@@ -19,9 +19,6 @@ const header = document.querySelectorAll('header')[0];
 const screenVs = document.querySelectorAll('.board2')[0];
 
 
-
-
-
 //Returns X or O .svg based on active player
 function playerSymbol() {
   if (player1.classList == "players active"){
@@ -75,7 +72,6 @@ window.onload = function () {
   nameInput.setAttribute('maxlength', '3');
   header.appendChild(nameInput);
   nameInput.focus();
-
 }
 
 //Callback function for screen display Controls
@@ -153,7 +149,7 @@ function checkWin(box1, box2, box3) {
   }
 }
 
-//Checks for win.  If true, delays 5 seconds and calls endGameWin function
+//Checks for win.  If true, delays 1 second, turns winning player box green and calls endGameWin function
 function checkWinAll(){
   let nameInput = document.querySelectorAll('.button-input')[0].value;
   if (checkWin(0, 1, 2) == true ||
@@ -188,7 +184,7 @@ function checkWinAll(){
   }
 }
 
-////Checks for win.  If true, delays 5 seconds and calls endGameTie function
+////Checks for timeout.  If true, delays 1 second and calls endGameTie function
 function checkTie (){
   let crossSquares = document.querySelectorAll('.box-filled-1');
   if (crossSquares.length == 5 && checkWinAll() !== true){
@@ -209,6 +205,7 @@ function endGameTie(){
   tieScreen();
 }
 
+//Randomly selects box for player 2 move, if selected box is already played, calls computerPlay2
 function computerPlay1(){
   let i = Math.floor(Math.random() * 9)
   if (boxes[i].classList.value !== 'box box-filled-1' && boxes[i].classList.value !== 'box box-filled-2'){
@@ -222,6 +219,7 @@ function computerPlay1(){
   } else {computerPlay2()}
 }
 
+//Randomly selects box for player 2 move, if selected box is already played, calls computerPlay1
 function computerPlay2(){
   let i = Math.floor(Math.random() * 9)
   if (boxes[i].classList.value !== 'box box-filled-1' && boxes[i].classList.value !== 'box box-filled-2'){
